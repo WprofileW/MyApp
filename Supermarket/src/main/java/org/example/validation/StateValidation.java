@@ -1,6 +1,5 @@
 package org.example.validation;
 
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.example.anno.State;

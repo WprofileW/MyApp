@@ -1,14 +1,16 @@
 package org.example.utils;
 
-
+import lombok.extern.slf4j.Slf4j;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Slf4j
 public class Md5Util {
     /**
      * 默认的密码字符串组合，用来将字节转换成 16 进制表示的字符,apache校验下载的文件的正确性用的就是默认的这个组合
      */
-    protected static char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    protected static char[] hexDigits =
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     protected static MessageDigest messagedigest = null;
 
@@ -16,8 +18,8 @@ public class Md5Util {
         try {
             messagedigest = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException nsaex) {
-            System.err.println(Md5Util.class.getName() + "初始化失败，MessageDigest不支持MD5Util。");
-            nsaex.printStackTrace();
+            log.error(Md5Util.class.getName() + "初始化失败，MessageDigest不支持MD5Util。");
+            log.error(nsaex.getMessage());
         }
     }
 
@@ -43,17 +45,16 @@ public class Md5Util {
         return s.equals(md5PwdStr);
     }
 
-
     public static String getMD5String(byte[] bytes) {
         messagedigest.update(bytes);
         return bufferToHex(messagedigest.digest());
     }
 
-    private static String bufferToHex(byte bytes[]) {
+    private static String bufferToHex(byte[] bytes) {
         return bufferToHex(bytes, 0, bytes.length);
     }
 
-    private static String bufferToHex(byte bytes[], int m, int n) {
+    private static String bufferToHex(byte[] bytes, int m, int n) {
         StringBuffer stringbuffer = new StringBuffer(2 * n);
         int k = m + n;
         for (int l = m; l < k; l++) {
@@ -69,5 +70,4 @@ public class Md5Util {
         stringbuffer.append(c0);
         stringbuffer.append(c1);
     }
-
 }

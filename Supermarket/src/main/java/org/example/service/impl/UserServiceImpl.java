@@ -1,6 +1,8 @@
 package org.example.service.impl;
 
+import org.example.mapper.ContactMapper;
 import org.example.mapper.UserMapper;
+import org.example.pojo.Contact;
 import org.example.pojo.Result;
 import org.example.pojo.User;
 import org.example.service.UserService;
@@ -23,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ContactMapper contactMapper;
 
 
     @Override
@@ -107,11 +111,38 @@ public class UserServiceImpl implements UserService {
         return Result.success();
     }
 
-
     @Override
     public Result getUserInfo() {
         Map<String, Object> map = ThreadLocalUtil.get();
-        String username = (String) map.get("username");
-        return Result.success(userMapper.findByUserName(username));
+        Integer userId = (Integer) map.get("userId");
+        //获取联系方式
+        Contact contact = contactMapper.getContactByUserId(userId);
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("name", contact.getName());
+        infoMap.put("phone", contact.getPhone());
+        infoMap.put("email", contact.getEmail());
+        infoMap.put("address", contact.getAddress());
+        return Result.success(infoMap);
+    }
+
+    @Override
+    public <T> Result setUserInfo(Map<T, T> params) {
+        String name = (String) params.get("name");
+        String phone = (String) params.get("phone");
+        String email = (String) params.get("email");
+        String address = (String) params.get("address");
+        String notes = (String) params.get("notes");
+        Map<String, String> map = new HashMap<>();
+        map.put("name", name);
+        map.put("phone", phone);
+        map.put("email", email);
+        map.put("address", address);
+        map.put("notes", notes);
+
+        Map<String, Object> mapLocal = ThreadLocalUtil.get();
+        Integer userId = (Integer) mapLocal.get("userId");
+        contactMapper.insertContact(userId,name, phone, email, address, notes);
+
+        return Result.success(map);
     }
 }

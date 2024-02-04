@@ -16,4 +16,6 @@ public interface UserService {
 
     //获取用户信息
     Result getUserInfo();
+
+    <T> Result setUserInfo(Map<T,T> params);
 }

@@ -2,12 +2,10 @@ package org.example.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-
 import java.util.Date;
 import java.util.Map;
 
 public class JwtUtil {
-
     private static final String KEY = "wzq";
 
     //接收业务数据,生成token并返回
@@ -26,5 +24,4 @@ public class JwtUtil {
                 .getClaim("claims")
                 .asMap();
     }
-
 }

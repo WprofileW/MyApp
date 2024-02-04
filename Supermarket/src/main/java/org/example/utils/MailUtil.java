@@ -1,15 +1,14 @@
 package org.example.utils;
 
-
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.example.pojo.EmailProperties;
-
 import java.util.Properties;
 
+@Slf4j
 public class MailUtil {
-
     /**
      * 发送邮件
      *
@@ -27,46 +26,40 @@ public class MailUtil {
             properties.put("mail.smtp.auth", emailProperties.isAuth());
             properties.put("mail.user", emailProperties.getUser());
             properties.put("mail.password", emailProperties.getCode());
-
             // 构建授权信息，用于进行SMTP进行身份验证
             Authenticator authenticator = new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(emailProperties.getUser(), emailProperties.getCode());
+                    return new PasswordAuthentication(
+                            emailProperties.getUser(), emailProperties.getCode());
                 }
             };
             // 使用环境属性和授权信息，创建邮件会话
             Session mailSession = Session.getInstance(properties, authenticator);
             // 创建邮件消息
             message = new MimeMessage(mailSession);
-
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
-
         //如果邮件创建失败,直接返回
         if (message == null) {
             return false;
         }
-
         try {
             // 设置发件人
             InternetAddress form = new InternetAddress(emailProperties.getUser());
             message.setFrom(form);
-
             // 设置收件人
             InternetAddress toAddress = new InternetAddress(to);
             message.setRecipient(Message.RecipientType.TO, toAddress);
-
             // 设置邮件标题
             message.setSubject(title);
-
             // 设置邮件的内容体
             message.setContent(content, "text/html;charset=UTF-8");
             // 发送邮件
             Transport.send(message);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return true;
     }

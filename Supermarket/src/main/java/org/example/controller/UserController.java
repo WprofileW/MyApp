@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -35,7 +36,14 @@ public class UserController {
         return userService.login(username, password);
     }
 
-    @GetMapping("/userInfo")
+
+    @PostMapping("/setUserInfo")
+    public <T> Result setUserInfo(
+            @RequestBody Map<T, T> params) {
+        return userService.setUserInfo(params);
+    }
+
+    @GetMapping("/getUserInfo")
     public Result<User> userInfo() {
         return userService.getUserInfo();
     }
