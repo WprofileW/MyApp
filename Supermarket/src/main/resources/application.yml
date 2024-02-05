@@ -34,7 +34,7 @@ spring:
     druid:
       url: jdbc:mysql://localhost:3306/supermarket
       username: root
-#      password: 11111
+      #      password: 11111
       password: 3033715900
       driver-class-name: com.mysql.cj.jdbc.Driver
       # 初始化时建立物理连接的个数

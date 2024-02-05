@@ -17,10 +17,11 @@ public class EmailController {
     public Boolean send() {
         //收件人信箱
         String to = "jiangf338@gmail.com";
+//        String to = "1799743697@qq.com";
         //邮件标题
         String title = "测试邮件";
         //邮件正文
-        String content = "我是即将年薪百万的打工仔......";
+        String content = "这是一个测试邮件";
         //发送邮件
         boolean flag = emailService.send(to, title, content);
         return flag;

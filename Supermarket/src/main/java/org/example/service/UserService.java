@@ -6,16 +6,19 @@ import java.util.Map;
 
 public interface UserService {
     //注册
-    Result register(String username, String password);
+    <T> Result register(Map<T, T> params);
 
     //登录
-    Result<String> login(String username, String password);
+    <T> Result login(Map<T, T> params);
 
     //更新密码
-    Result updatePwd(Map<String, String> params, String token);
+    <T> Result updatePwd(Map<T, T> params, String token);
+
+    <T> Result setUserInfo(Map<T, T> params);
 
     //获取用户信息
     Result getUserInfo();
 
-    <T> Result setUserInfo(Map<T,T> params);
+    //修改用户信息
+    <T> Result updateUserInfo(Map<T, T> params);
 }

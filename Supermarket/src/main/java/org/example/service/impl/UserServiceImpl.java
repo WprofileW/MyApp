@@ -28,9 +28,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ContactMapper contactMapper;
 
-
     @Override
-    public Result register(String username, String password) {
+    public <T> Result register(Map<T, T> params) {
+        String username = (String) params.get("username");
+        String password = (String) params.get("password");
         //查询用户
         User user = userMapper.findByUserName(username);
         if (user == null) {
@@ -46,9 +47,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
     @Override
-    public Result<String> login(String username, String password) {
+    public <T> Result login(Map<T, T> params) {
+        String username = (String) params.get("username");
+        String password = (String) params.get("password");
 
         //根据用户名查询用户
         User loginUser = userMapper.findByUserName(username);
@@ -56,20 +58,16 @@ public class UserServiceImpl implements UserService {
         if (loginUser == null) {
             return Result.error("用户名错误");
         }
-
-        //判断密码是否正确  loginUser对象中的password是密文
+        //判断密码是否正确
         if (Md5Util.getMD5String(password).equals(loginUser.getPassword())) {
             //登录成功
             Map<String, Object> claims = new HashMap<>();
             claims.put("userId", loginUser.getUserId());
             claims.put("username", loginUser.getUsername());
             String token = JwtUtil.genToken(claims);
-
-
             //把token存储到redis中
             ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
             operations.set(token, token, 1, TimeUnit.HOURS);
-
             userMapper.updateLastLoginTime(loginUser.getUsername());
             return Result.success(token);
         }
@@ -77,11 +75,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result updatePwd(Map<String, String> params, String token) {
+    public <T> Result updatePwd(Map<T, T> params, String token) {
         //1.校验参数
-        String oldPwd = params.get("old_pwd");
-        String newPwd = params.get("new_pwd");
-        String rePwd = params.get("re_pwd");
+        String oldPwd = (String) params.get("old_pwd");
+        String newPwd = (String) params.get("new_pwd");
+        String rePwd = (String) params.get("re_pwd");
         if (!StringUtils.hasLength(oldPwd)
                 || !StringUtils.hasLength(newPwd)
                 || !StringUtils.hasLength(rePwd)) {
@@ -112,37 +110,62 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result getUserInfo() {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer userId = (Integer) map.get("userId");
-        //获取联系方式
-        Contact contact = contactMapper.getContactByUserId(userId);
-        Map<String, String> infoMap = new HashMap<>();
-        infoMap.put("name", contact.getName());
-        infoMap.put("phone", contact.getPhone());
-        infoMap.put("email", contact.getEmail());
-        infoMap.put("address", contact.getAddress());
-        return Result.success(infoMap);
-    }
-
-    @Override
     public <T> Result setUserInfo(Map<T, T> params) {
-        String name = (String) params.get("name");
+        //从token获取username
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        //从params中获取个人信息
+        String realName = (String) params.get("realName");
         String phone = (String) params.get("phone");
         String email = (String) params.get("email");
         String address = (String) params.get("address");
         String notes = (String) params.get("notes");
-        Map<String, String> map = new HashMap<>();
-        map.put("name", name);
-        map.put("phone", phone);
-        map.put("email", email);
-        map.put("address", address);
-        map.put("notes", notes);
+        contactMapper.insertContact(username, realName, phone, email, address, notes);
 
-        Map<String, Object> mapLocal = ThreadLocalUtil.get();
-        Integer userId = (Integer) mapLocal.get("userId");
-        contactMapper.insertContact(userId,name, phone, email, address, notes);
+        //返回刚刚设置的个人信息
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("realName", realName);
+        infoMap.put("phone", phone);
+        infoMap.put("email", email);
+        infoMap.put("address", address);
+        infoMap.put("notes", notes);
+        return Result.success(infoMap);
+    }
 
-        return Result.success(map);
+    @Override
+    public Result getUserInfo() {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        //获取联系方式
+        Contact contact = contactMapper.getContactByUsername(username);
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("realName", contact.getRealName());
+        infoMap.put("phone", contact.getPhone());
+        infoMap.put("email", contact.getEmail());
+        infoMap.put("address", contact.getAddress());
+        infoMap.put("notes", contact.getNotes());
+        return Result.success(infoMap);
+    }
+
+    @Override
+    public <T> Result updateUserInfo(Map<T, T> params) {
+        //从token获取username
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        //从params中获取个人信息
+        String realName = (String) params.get("realName");
+        String phone = (String) params.get("phone");
+        String email = (String) params.get("email");
+        String address = (String) params.get("address");
+        String notes = (String) params.get("notes");
+        contactMapper.updateContact(username, realName, phone, email, address, notes);
+        //返回刚刚设置的个人信息
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("realName", realName);
+        infoMap.put("phone", phone);
+        infoMap.put("email", email);
+        infoMap.put("address", address);
+        infoMap.put("notes", notes);
+        return Result.success(infoMap);
     }
 }
