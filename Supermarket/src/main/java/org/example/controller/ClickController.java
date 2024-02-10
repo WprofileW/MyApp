@@ -1,28 +1,24 @@
 package org.example.controller;
 
+import org.example.pojo.ClickEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+// 控制器
 @RestController
-@RequestMapping("/clickEvent")
-@Validated
+@RequestMapping("/click")
 public class ClickController {
     @Autowired
     private ClickEventProducer clickEventProducer;
 
-    @GetMapping("/click")
-    public String handleClickEvent(@RequestParam String userId, @RequestParam String pageId) {
-        // 处理点击事件的业务逻辑
-
-        // 发送点击事件到Kafka
-        clickEventProducer.sendClickEvent(userId, pageId);
-
-        return "Click event processed successfully!";
+    @PostMapping("/event")
+    public ResponseEntity<String> handleClick(@RequestBody ClickEvent clickEvent) {
+        // 处理点击事件
+        clickEventProducer.sendClickEvent(clickEvent);
+        return ResponseEntity.ok("Click event received and processed successfully.");
     }
 }
-
-

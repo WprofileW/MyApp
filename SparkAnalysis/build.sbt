@@ -4,5 +4,6 @@ ThisBuild / scalaVersion := "2.12.15"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "SparkAnalysis"
+    name := "SparkAnalysis",
+    libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7"
   )

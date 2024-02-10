@@ -1,0 +1,8 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/supermarket
+      username: root
+      password: 3033715900

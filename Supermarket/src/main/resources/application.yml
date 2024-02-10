@@ -11,6 +11,9 @@ server:
     context-path: /dashboard
 ## -------------------------------------------------- ##
 spring:
+  profiles:
+#    active: dev
+    active: run
   data:
     redis:
       host: localhost
@@ -18,24 +21,18 @@ spring:
   #-----------
   # kafka
   kafka:
-    bootstrap-servers: localhost:9092
-    # bootstrap-servers: hadoop201:9092,hadoop202:9092,hadoop203:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: wzq
+      group-id: click
   #-----------
   # datasource
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://localhost:3306/supermarket
-      username: root
-      #      password: 11111
-      password: 3033715900
       driver-class-name: com.mysql.cj.jdbc.Driver
       # 初始化时建立物理连接的个数
       initial-size: 5
@@ -70,6 +67,7 @@ spring:
         reset-enable: true
         login-username: admin
         login-password: admin
+
 ## -------------------------------------------------- ##
 mybatis:
   configuration:

@@ -1,8 +1,8 @@
 package org.example.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.mapper.ContactMapper;
 import org.example.mapper.UserMapper;
-import org.example.pojo.Contact;
 import org.example.pojo.Result;
 import org.example.pojo.User;
 import org.example.service.UserService;
@@ -15,11 +15,14 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -67,8 +70,11 @@ public class UserServiceImpl implements UserService {
             String token = JwtUtil.genToken(claims);
             //把token存储到redis中
             ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+            //设置1个小时过期
             operations.set(token, token, 1, TimeUnit.HOURS);
+            //更新登陆时间
             userMapper.updateLastLoginTime(loginUser.getUsername());
+            log.info("[CustomizedLogs]:-------欢迎{}登录-------", loginUser.getUsername());
             return Result.success(token);
         }
         return Result.error("密码错误");
@@ -137,14 +143,10 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> map = ThreadLocalUtil.get();
         String username = (String) map.get("username");
         //获取联系方式
-        Contact contact = contactMapper.getContactByUsername(username);
-        Map<String, String> infoMap = new HashMap<>();
-        infoMap.put("realName", contact.getRealName());
-        infoMap.put("phone", contact.getPhone());
-        infoMap.put("email", contact.getEmail());
-        infoMap.put("address", contact.getAddress());
-        infoMap.put("notes", contact.getNotes());
-        return Result.success(infoMap);
+        List<Object> infoList = new ArrayList<>();
+        infoList.add(userMapper.findByUserName(username));
+        infoList.add(contactMapper.getContactByUsername(username));
+        return Result.success(infoList);
     }
 
     @Override

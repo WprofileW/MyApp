@@ -1,20 +1,20 @@
 package org.example.controller;
 
+import org.example.pojo.ClickEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class ClickEventProducer {
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-
-    public ClickEventProducer(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
-
-    public void sendClickEvent(String userId, String pageId) {
-        String topic = "click-events";
-        String message = userId + "," + pageId;
-        kafkaTemplate.send(topic, message);
+    public void sendClickEvent(ClickEvent clickEvent) {
+        clickEvent.setStartTime(LocalDateTime.now().
+                format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        kafkaTemplate.send("click-events", clickEvent.toString());
     }
 }
