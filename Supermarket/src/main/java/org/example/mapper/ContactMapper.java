@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.example.pojo.Contact;
 
+import java.util.List;
+
 @Mapper
 public interface ContactMapper {
     @Insert("INSERT INTO " +
@@ -20,4 +22,7 @@ public interface ContactMapper {
 
     @Select("SELECT * FROM contact WHERE username = #{username}")
     Contact getContactByUsername(String username);
+
+    @Select("SELECT * FROM contact")
+    List<Contact> getAllUsers();
 }

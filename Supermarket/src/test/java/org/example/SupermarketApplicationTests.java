@@ -11,7 +11,7 @@ class SupermarketApplicationTests {
 
     @Test
     void jsonTest() {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("key1", "value1");
         String jsonStr = JSON.toJSONString(map);
         System.out.println(jsonStr);

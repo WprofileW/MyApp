@@ -12,8 +12,8 @@ server:
 ## -------------------------------------------------- ##
 spring:
   profiles:
-#    active: dev
-    active: run
+    active: dev
+#    active: run
   data:
     redis:
       host: localhost

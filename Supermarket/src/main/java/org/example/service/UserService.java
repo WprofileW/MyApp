@@ -21,4 +21,6 @@ public interface UserService {
 
     //修改用户信息
     <T> Result updateUserInfo(Map<T, T> params);
+
+    <T> Result getAllUsers(Map<T, T> params);
 }

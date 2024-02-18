@@ -1,8 +1,12 @@
 package org.example.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.example.mapper.ContactMapper;
 import org.example.mapper.UserMapper;
+import org.example.pojo.Contact;
+import org.example.pojo.PageBean;
 import org.example.pojo.Result;
 import org.example.pojo.User;
 import org.example.service.UserService;
@@ -15,7 +19,6 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,8 +73,8 @@ public class UserServiceImpl implements UserService {
             String token = JwtUtil.genToken(claims);
             //把token存储到redis中
             ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-            //设置1个小时过期
-            operations.set(token, token, 1, TimeUnit.HOURS);
+            //设置1天过期
+            operations.set(token, token, 1, TimeUnit.DAYS);
             //更新登陆时间
             userMapper.updateLastLoginTime(loginUser.getUsername());
             log.info("[CustomizedLogs]:-------欢迎{}登录-------", loginUser.getUsername());
@@ -142,19 +145,13 @@ public class UserServiceImpl implements UserService {
     public Result getUserInfo() {
         Map<String, Object> map = ThreadLocalUtil.get();
         String username = (String) map.get("username");
-        //获取联系方式
-        List<Object> infoList = new ArrayList<>();
-        infoList.add(userMapper.findByUserName(username));
-        infoList.add(contactMapper.getContactByUsername(username));
-        return Result.success(infoList);
+        return Result.success(contactMapper.getContactByUsername(username));
     }
 
     @Override
     public <T> Result updateUserInfo(Map<T, T> params) {
-        //从token获取username
-        Map<String, Object> map = ThreadLocalUtil.get();
-        String username = (String) map.get("username");
         //从params中获取个人信息
+        String username =(String)params.get("username");
         String realName = (String) params.get("realName");
         String phone = (String) params.get("phone");
         String email = (String) params.get("email");
@@ -169,5 +166,23 @@ public class UserServiceImpl implements UserService {
         infoMap.put("address", address);
         infoMap.put("notes", notes);
         return Result.success(infoMap);
+    }
+
+    @Override
+    public <T> Result getAllUsers(Map<T, T> params) {
+        Integer pageNum = (Integer) params.get("pageNum");
+        Integer pageSize = (Integer) params.get("pageSize");
+        //1.创建PageBean对象
+        PageBean<Contact> pb = new PageBean<>();
+        //2.开启分页查询 PageHelper
+        PageHelper.startPage(pageNum, pageSize);
+        //3.调用mapper
+        List<Contact> as = contactMapper.getAllUsers();
+        //Page中提供了方法,可以获取PageHelper分页查询后 得到的总记录条数和当前页数据
+        Page<Contact> p = (Page<Contact>) as;
+        //把数据填充到PageBean对象中
+        pb.setTotal((int) p.getTotal());
+        pb.setItems(p.getResult());
+        return Result.success(pb);
     }
 }

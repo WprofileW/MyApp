@@ -1,6 +1,7 @@
 package org.example.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Component
 public class Contact {
+    @JsonIgnore
     private Integer contactId;
     private String username;
     private String realName;

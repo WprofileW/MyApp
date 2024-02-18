@@ -10,6 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 @Validated
 public class UserController {
     @Autowired
@@ -45,5 +46,10 @@ public class UserController {
     @PutMapping("/updateUserInfo")
     public <T> Result updateUserInfo(@RequestBody Map<T, T> params) {
         return userService.updateUserInfo(params);
+    }
+
+    @PostMapping("/getAllUser")
+    public <T> Result getAllUsers(@RequestBody Map<T, T> params) {
+        return userService.getAllUsers(params);
     }
 }
