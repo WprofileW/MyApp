@@ -1,9 +1,10 @@
 package org.example.service;
 
 import org.example.pojo.Result;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
-
+@Service
 public interface UserService {
     //注册
     <T> Result register(Map<T, T> params);

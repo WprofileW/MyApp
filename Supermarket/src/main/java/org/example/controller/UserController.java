@@ -33,11 +33,6 @@ public class UserController {
         return userService.updatePwd(params, token);
     }
 
-    @PostMapping("/setUserInfo")
-    public <T> Result setUserInfo(@RequestBody Map<T, T> params) {
-        return userService.setUserInfo(params);
-    }
-
     @GetMapping("/getUserInfo")
     public Result getUserInfo() {
         return userService.getUserInfo();

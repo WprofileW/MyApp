@@ -38,6 +38,12 @@ public class UserServiceImpl implements UserService {
     public <T> Result register(Map<T, T> params) {
         String username = (String) params.get("username");
         String password = (String) params.get("password");
+        String realName = (String) params.get("realName");
+        String phone = (String) params.get("phone");
+        String email = (String) params.get("email");
+        String address = (String) params.get("address");
+        String notes = (String) params.get("notes");
+        contactMapper.insertContact(username, realName, phone, email, address, notes);
         //查询用户
         User user = userMapper.findByUserName(username);
         if (user == null) {
