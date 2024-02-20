@@ -22,8 +22,8 @@ public interface ProductInventoryMapper {
     @Options(useGeneratedKeys = true, keyProperty = "inventoryId")
     void insertProductInventory(ProductInventory productInventory);
 
-    @Update("UPDATE product_inventory SET unit_price = #{unitPrice}, quantity = #{quantity}, " +
-            "category = #{category}, supplier = #{supplier}, warehouse_name = #{warehouseName}, update_time = #{updateTime} " +
+    @Update("UPDATE product_inventory SET product_name=#{productName}, unit_price = #{unitPrice}, quantity = #{quantity}, " +
+            "category = #{category}, supplier = #{supplier}, warehouse_name = #{warehouseName}, update_time = NOW() " +
             "WHERE inventory_id = #{inventoryId}")
     void updateProductInventory(ProductInventory productInventory);
 

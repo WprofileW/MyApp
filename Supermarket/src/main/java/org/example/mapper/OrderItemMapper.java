@@ -12,7 +12,7 @@ public interface OrderItemMapper {
     OrderItem getOrderItemById(@Param("orderItemId") Integer orderItemId);
 
     @Select("SELECT * FROM order_item WHERE username = #{username}")
-    List<OrderItem> getOrderItemsByUsername(@Param("username") String username);
+    List<OrderItem> getOrderItemsByUsername(String username);
 
     @Select("SELECT * FROM order_item")
     List<OrderItem> getAllOrderItems();

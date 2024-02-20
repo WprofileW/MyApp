@@ -5,8 +5,13 @@ import org.example.pojo.Result;
 
 import java.util.Map;
 
-public interface ProductInventoryService{
+public interface ProductInventoryService {
     Result addProductInventory(ProductInventory productInventory);
 
-    <T> Result getAllProducts(Map<T,T> params);
+    Result updateProduct(ProductInventory productInventory);
+
+    <T> Result getAllProducts(Map<T, T> params);
+
+
+    Result deleteProduct(ProductInventory productInventory);
 }

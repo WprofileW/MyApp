@@ -56,13 +56,7 @@ public class TypeInterceptor implements Interceptor {
     }
 
 
-
-
-
-
-
-
-    public static class Builder implements Interceptor.Builder{
+    public static class Builder implements Interceptor.Builder {
 
         @Override
         public Interceptor build() {

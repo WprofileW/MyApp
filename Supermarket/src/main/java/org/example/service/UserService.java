@@ -4,6 +4,7 @@ import org.example.pojo.Result;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+
 @Service
 public interface UserService {
     //注册

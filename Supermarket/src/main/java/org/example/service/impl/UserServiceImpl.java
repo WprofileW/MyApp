@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
     public <T> Result register(Map<T, T> params) {
         String username = (String) params.get("username");
         String password = (String) params.get("password");
+        Integer roleId = (Integer) params.get("roleId");
         String realName = (String) params.get("realName");
         String phone = (String) params.get("phone");
         String email = (String) params.get("email");
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
             //加密
             String md5String = Md5Util.getMD5String(password);
             //添加
-            userMapper.add(username, md5String);
+            userMapper.add(username, md5String, roleId);
             return Result.success();
         } else {
             //占用
@@ -157,7 +158,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public <T> Result updateUserInfo(Map<T, T> params) {
         //从params中获取个人信息
-        String username =(String)params.get("username");
+        String username = (String) params.get("username");
         String realName = (String) params.get("realName");
         String phone = (String) params.get("phone");
         String email = (String) params.get("email");

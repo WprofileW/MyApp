@@ -13,7 +13,7 @@ server:
 spring:
   profiles:
     active: dev
-#    active: run
+  #    active: run
   data:
     redis:
       host: localhost

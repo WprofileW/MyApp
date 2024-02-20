@@ -15,11 +15,18 @@ import java.util.Map;
 
 @Service
 public class ProductInventoryServiceImpl implements ProductInventoryService {
-@Autowired
+    @Autowired
     private ProductInventoryMapper productInventoryMapper;
+
     @Override
     public Result addProductInventory(ProductInventory productInventory) {
         productInventoryMapper.insertProductInventory(productInventory);
+        return Result.success();
+    }
+
+    @Override
+    public Result updateProduct(ProductInventory productInventory) {
+        productInventoryMapper.updateProductInventory(productInventory);
         return Result.success();
     }
 
@@ -39,5 +46,11 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
         pb.setTotal((int) p.getTotal());
         pb.setItems(p.getResult());
         return Result.success(pb);
+    }
+
+    @Override
+    public Result deleteProduct(ProductInventory productInventory) {
+        productInventoryMapper.deleteProductInventoryById(productInventory.getInventoryId());
+        return Result.success();
     }
 }

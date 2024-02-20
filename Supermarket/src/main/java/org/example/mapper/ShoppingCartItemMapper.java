@@ -18,7 +18,7 @@ public interface ShoppingCartItemMapper {
     List<ShoppingCartItem> getAllShoppingCartItems();
 
     @Insert("INSERT INTO shopping_cart_item (username, product_name, unit_price, quantity, total_price) " +
-            "VALUES (#{username}, #{productName}, #{unitPrice}, #{quantity}, #{totalPrice})")
+            "VALUES (#{username}, #{productName}, #{unitPrice}, #{quantity}, #{unitPrice}*#{quantity})")
     @Options(useGeneratedKeys = true, keyProperty = "cartItemId")
     void insertShoppingCartItem(ShoppingCartItem shoppingCartItem);
 

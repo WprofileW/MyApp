@@ -17,7 +17,6 @@ public class EmailController {
     public Boolean send() {
         //收件人信箱
         String to = "jiangf338@gmail.com";
-//        String to = "1799743697@qq.com";
         //邮件标题
         String title = "测试邮件";
         //邮件正文
@@ -26,5 +25,4 @@ public class EmailController {
         boolean flag = emailService.send(to, title, content);
         return flag;
     }
-
 }
