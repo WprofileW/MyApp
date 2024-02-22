@@ -36,4 +36,9 @@ public class ShoppingCartController {
     public <T> Result getAllCartItems(@RequestBody Map<T, T> params) {
         return shoppingCartService.getAllCartItems(params);
     }
+
+    @GetMapping("/deleteAllCartItems")
+    public Result deleteAllCartItems() {
+        return shoppingCartService.deleteAllCartItems();
+    }
 }

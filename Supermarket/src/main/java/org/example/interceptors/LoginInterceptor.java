@@ -2,6 +2,7 @@ package org.example.interceptors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.mapper.ShoppingCartItemMapper;
 import org.example.utils.JwtUtil;
 import org.example.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,16 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private ShoppingCartItemMapper shoppingCartItemMapper;
 
     @Override
     public boolean preHandle(
@@ -33,6 +38,11 @@ public class LoginInterceptor implements HandlerInterceptor {
                 throw new RuntimeException();
             }
             Map<String, Object> claims = JwtUtil.parseToken(token);
+            //获取用户购物车项的所有itemId
+            List<Integer> shoppingCartItemIdList = new ArrayList<>();
+            shoppingCartItemMapper.getShoppingCartItemsByUsername((String) claims.get("username"))
+                    .forEach(i -> shoppingCartItemIdList.add(i.getCartItemId()));
+            claims.put("shoppingCartItemIdList", shoppingCartItemIdList);
             //把业务数据存储到ThreadLocal中
             ThreadLocalUtil.set(claims);
             //放行

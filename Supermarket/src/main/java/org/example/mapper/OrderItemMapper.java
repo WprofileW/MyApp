@@ -18,7 +18,7 @@ public interface OrderItemMapper {
     List<OrderItem> getAllOrderItems();
 
     @Insert("INSERT INTO order_item (username, product_name, unit_price, quantity, total_price, order_date) " +
-            "VALUES (#{username}, #{productName}, #{unitPrice}, #{quantity}, #{totalPrice}, #{orderDate})")
+            "VALUES (#{username}, #{productName}, #{unitPrice}, #{quantity}, #{totalPrice}, NOW())")
     @Options(useGeneratedKeys = true, keyProperty = "orderItemId")
     void insertOrderItem(OrderItem orderItem);
 

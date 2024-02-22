@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/getAllUser")
-    public <T> Result getAllUsers(@RequestBody Map<T, T> params) {
+    public <T> Result getAllUser(@RequestBody Map<T, T> params) {
         return userService.getAllUsers(params);
     }
 }

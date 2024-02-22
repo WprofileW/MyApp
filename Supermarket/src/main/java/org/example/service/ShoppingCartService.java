@@ -15,4 +15,6 @@ public interface ShoppingCartService {
     Result deleteCartItem(ShoppingCartItem shoppingCartItem);
 
     <T> Result getAllCartItems(Map<T, T> params);
+
+    Result deleteAllCartItems();
 }

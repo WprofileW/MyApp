@@ -85,7 +85,10 @@ public class UserServiceImpl implements UserService {
             //更新登陆时间
             userMapper.updateLastLoginTime(loginUser.getUsername());
             log.info("[CustomizedLogs]:-------欢迎{}登录-------", loginUser.getUsername());
-            return Result.success(token);
+            Map<String, Object> infoMap = new HashMap<>();
+            infoMap.put("token", token);
+            infoMap.put("roleId", loginUser.getRoleId());
+            return Result.success(infoMap);
         }
         return Result.error("密码错误");
     }

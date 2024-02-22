@@ -8,6 +8,6 @@ public class ShoppingCartItem {
     private String username;
     private String productName;
     private Integer unitPrice;
-    private Integer quantity;
+    private Integer num;
     private Integer totalPrice;
 }

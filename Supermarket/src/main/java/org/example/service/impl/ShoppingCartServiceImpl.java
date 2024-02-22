@@ -21,7 +21,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public Result addCartItem(ShoppingCartItem shoppingCartItem) {
-        shoppingCartItemMapper.insertShoppingCartItem(shoppingCartItem);
+        System.out.println(shoppingCartItem);
+        Map<String, Object> map = ThreadLocalUtil.get();
+        System.out.println(map);
+        List<Integer> shoppingCartItemIdList = (List<Integer>) map.get("shoppingCartItemIdList");
+        Integer index = shoppingCartItemIdList.indexOf(shoppingCartItem.getCartItemId());
+        if (index != -1) {
+            updateCartItem(shoppingCartItem);
+        } else {
+            shoppingCartItemMapper.insertShoppingCartItem(shoppingCartItem);
+        }
         return Result.success();
     }
 
@@ -57,5 +66,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         pb.setTotal((int) p.getTotal());
         pb.setItems(p.getResult());
         return Result.success(pb);
+    }
+
+    @Override
+    public Result deleteAllCartItems() {
+        //从token获取username
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        shoppingCartItemMapper.deleteShoppingCartItemByUsername(username);
+        return Result.success();
     }
 }

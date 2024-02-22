@@ -17,17 +17,19 @@ public interface ShoppingCartItemMapper {
     @Select("SELECT * FROM shopping_cart_item")
     List<ShoppingCartItem> getAllShoppingCartItems();
 
-    @Insert("INSERT INTO shopping_cart_item (username, product_name, unit_price, quantity, total_price) " +
-            "VALUES (#{username}, #{productName}, #{unitPrice}, #{quantity}, #{unitPrice}*#{quantity})")
-    @Options(useGeneratedKeys = true, keyProperty = "cartItemId")
+    @Insert("INSERT INTO shopping_cart_item (cart_item_id,username, product_name, unit_price, num, total_price) " +
+            "VALUES (#{cartItemId},#{username}, #{productName}, #{unitPrice}, #{num}, #{unitPrice}*#{num})")
     void insertShoppingCartItem(ShoppingCartItem shoppingCartItem);
 
     @Update("UPDATE shopping_cart_item SET username = #{username}, product_name = #{productName}, " +
-            "unit_price = #{unitPrice}, quantity = #{quantity}, total_price = #{totalPrice} " +
+            "unit_price = #{unitPrice}, num = #{num}, total_price = #{unitPrice}*#{num} " +
             "WHERE cart_item_id = #{cartItemId}")
     void updateShoppingCartItem(ShoppingCartItem shoppingCartItem);
 
     @Delete("DELETE FROM shopping_cart_item WHERE cart_item_id = #{cartItemId}")
     void deleteShoppingCartItemById(@Param("cartItemId") Integer cartItemId);
+
+    @Delete("DELETE FROM shopping_cart_item WHERE username = #{username}")
+    void deleteShoppingCartItemByUsername(String username);
 }
 

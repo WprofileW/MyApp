@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import com.alibaba.fastjson.JSON;
 import org.example.pojo.ProductInventory;
 import org.example.pojo.Result;
 import org.example.service.ProductInventoryService;
@@ -23,8 +22,7 @@ public class ProductInventoryController {
 
     @PostMapping("/addProduct")
     public Result addProduct(@RequestBody ProductInventory productInventory) {
-        kafkaTemplate.send("InventoryChange", JSON.toJSONString(productInventory));
-        return productInventoryService.addProductInventory(productInventory);
+        return productInventoryService.addProduct(productInventory);
     }
 
     @PutMapping("/updateProduct")

@@ -6,7 +6,7 @@ import org.example.pojo.Result;
 import java.util.Map;
 
 public interface ProductInventoryService {
-    Result addProductInventory(ProductInventory productInventory);
+    Result addProduct(ProductInventory productInventory);
 
     Result updateProduct(ProductInventory productInventory);
 
