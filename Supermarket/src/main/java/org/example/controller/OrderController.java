@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.pojo.OrderItem;
 import org.example.pojo.Result;
 import org.example.service.OrderItemService;
@@ -15,6 +16,7 @@ import java.util.Map;
 @RequestMapping("/order")
 @CrossOrigin
 @Validated
+@Slf4j
 public class OrderController {
     @Autowired
     private OrderItemService orderItemService;

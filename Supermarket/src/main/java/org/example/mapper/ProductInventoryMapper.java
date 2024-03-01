@@ -27,6 +27,9 @@ public interface ProductInventoryMapper {
             "WHERE inventory_id = #{inventoryId}")
     void updateProductInventory(ProductInventory productInventory);
 
+    @Update("UPDATE product_inventory SET quantity = #{quantity} ,update_time = NOW() WHERE product_name=#{productName}")
+    void updateProductInventoryByName(ProductInventory productInventory);
+
     @Delete("DELETE FROM product_inventory WHERE inventory_id = #{inventoryId}")
     void deleteProductInventoryById(@Param("inventoryId") Integer inventoryId);
 }

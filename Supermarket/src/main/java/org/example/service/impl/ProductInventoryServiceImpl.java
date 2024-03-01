@@ -31,9 +31,22 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
     }
 
     @Override
+    public Result updateProductByName(ProductInventory productInventory) {
+        productInventoryMapper.updateProductInventoryByName(productInventory);
+        return Result.success();
+    }
+
+    @Override
     public Result deleteProduct(ProductInventory productInventory) {
         productInventoryMapper.deleteProductInventoryById(productInventory.getInventoryId());
         return Result.success();
+    }
+
+    @Override
+    public <T> Result getProductByName(Map<T, T> params) {
+        return Result.success(
+                productInventoryMapper.getProductInventoryByName(
+                        (String) params.get("productName")));
     }
 
     @Override

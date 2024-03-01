@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class ClickEvent {
-    private String userId;
-    private String pageId;
-    private String startTime;
+public class ProductInventoryChange {
+    private long timestamp;
+    private String productName;
+    private int inventoryChange;
 }

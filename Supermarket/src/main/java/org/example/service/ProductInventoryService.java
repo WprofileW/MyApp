@@ -10,8 +10,11 @@ public interface ProductInventoryService {
 
     Result updateProduct(ProductInventory productInventory);
 
+    Result updateProductByName(ProductInventory productInventory);
+
     <T> Result getAllProducts(Map<T, T> params);
 
-
     Result deleteProduct(ProductInventory productInventory);
+
+    <T> Result getProductByName(Map<T, T> params);
 }

@@ -9,11 +9,8 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class ShoppingCartItem {
-    private Integer cartItemId;
-    private String username;
+public class TopProduct {
+    private Long timestamp;
     private String productName;
-    private Integer unitPrice;
-    private Integer num;
-    private Integer totalPrice;
+    private Long totalSales;
 }
