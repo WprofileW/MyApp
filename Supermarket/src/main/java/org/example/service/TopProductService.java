@@ -4,6 +4,6 @@ import org.example.pojo.Result;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface TopProductService  {
+public interface TopProductService {
     Result getTopThreeSale();
 }

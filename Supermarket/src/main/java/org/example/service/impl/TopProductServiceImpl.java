@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class TopProductServiceImpl implements TopProductService {
     @Autowired
     private TopProductMapper topProductMapper;
+
     @Override
     public Result getTopThreeSale() {
         return Result.success(topProductMapper.findLatestFourTopSale());

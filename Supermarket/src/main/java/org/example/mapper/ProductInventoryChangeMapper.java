@@ -2,6 +2,7 @@ package org.example.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.example.pojo.ProductInventoryChange;
+
 import java.util.List;
 
 @Mapper

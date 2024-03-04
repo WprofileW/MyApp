@@ -23,7 +23,7 @@ public class Top3SalesPerMinute {
     public static void main(String[] args) throws StreamingQueryException, TimeoutException {
         // 创建SparkSession
         SparkSession spark = SparkSession.builder()
-                .appName("Top3SalesPerMinuteToDatabase")
+                .appName("Top3SalesPerMinute")
                 .master("local[*]")
                 .getOrCreate();
         // 从Kafka读取数据
@@ -33,6 +33,7 @@ public class Top3SalesPerMinute {
                 .option("kafka.bootstrap.servers", "localhost:9092")
                 .option("subscribe", "purchase_records")
                 .option("startingOffsets", "latest")
+                .option("group.id", "sale_group")
                 .load();
 
         // 定义数据结构
@@ -71,14 +72,6 @@ public class Top3SalesPerMinute {
                 .orderBy(col("total_sales").desc())
                 .limit(3);
 
-//        // 启动流式查询以处理数据
-//        StreamingQuery query = top3ProductsPerMinute
-//                .writeStream()
-//                .outputMode("complete")
-//                .format("console")
-//                .start();
-//
-//        query.awaitTermination();
         // 定义数据库连接属性
         Properties connectionProperties = new Properties();
         connectionProperties.put("user", "root");
